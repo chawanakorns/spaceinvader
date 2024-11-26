@@ -5,6 +5,7 @@ import java.util.*;
 import com.example.invaders.entities.Boss;
 import com.example.invaders.entities.Character;
 import com.example.invaders.entities.Enemy;
+import com.example.invaders.entities.EnemyLevel;
 import com.example.invaders.model.AnimatedSprite;
 import javafx.animation.*;
 import javafx.application.Platform;
@@ -371,13 +372,13 @@ public class MainGame {
     }
 
     // enemy type score
-    public void updateScore(boolean isStrongEnemy) {
-        if (isStrongEnemy) {
-            updateScore(20); // Score for strong enemies
-        } else {
-            updateScore(10); // Score for regular enemies
+    public void updateScore(EnemyLevel enemyLevel) {
+        switch (enemyLevel) {
+            case STRONG -> updateScore(20); // Score for strong enemies
+            case NORMAL -> updateScore(10); // Score for normal enemies
         }
     }
+
 
     // boss objects
     private Boss createBoss() {

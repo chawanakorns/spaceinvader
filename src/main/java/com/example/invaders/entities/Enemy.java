@@ -74,32 +74,33 @@ public class Enemy {
         for (int row = 0; row < numRows; row++) {
             boolean isStrongRow = random.nextBoolean(); // Determine if the row should contain strong enemies
             for (int i = 0; i < numEnemiesPerRow; i++) {
+                AnimatedSprite enemySprite;
+                Character enemyCharacter;
+                EnemyLevel enemyLevel;
+
                 if (isStrongRow) {
-                    AnimatedSprite strongEnemyAnimatedSprite = new AnimatedSprite(spriteSheetImage, 6, 6, 1, 0, 0, 32, 32); // special enemies
-                    strongEnemyAnimatedSprite.setX(initialX + i * spacingX);
-                    strongEnemyAnimatedSprite.setY(initialY + row * spacingY);
-                    strongEnemyAnimatedSprite.setFitWidth(48);
-                    strongEnemyAnimatedSprite.setFitHeight(48);
-
-                    root.getChildren().add(strongEnemyAnimatedSprite);
-
-                    Character strongEnemyCharacter = new Character("", strongEnemyAnimatedSprite.getX(), strongEnemyAnimatedSprite.getY(), 64, 64);
-                    strongEnemyCharacter.setImageView(strongEnemyAnimatedSprite);
-                    strongEnemyCharacter.isStrongEnemy = true;
-                    enemies.add(strongEnemyCharacter);
+                    // Create strong enemy
+                    enemySprite = new AnimatedSprite(spriteSheetImage, 6, 6, 1, 0, 0, 32, 32);
+                    enemyLevel = EnemyLevel.STRONG;
                 } else {
-                    AnimatedSprite enemyAnimatedSprite = new AnimatedSprite(spriteSheetImage, 2, 2, 1, 0, 0, 32, 32); // normal enemies
-                    enemyAnimatedSprite.setX(initialX + i * spacingX);
-                    enemyAnimatedSprite.setY(initialY + row * spacingY);
-                    enemyAnimatedSprite.setFitWidth(48);
-                    enemyAnimatedSprite.setFitHeight(48);
-
-                    root.getChildren().add(enemyAnimatedSprite);
-
-                    Character enemyCharacter = new Character("", enemyAnimatedSprite.getX(), enemyAnimatedSprite.getY(), 64, 64);
-                    enemyCharacter.setImageView(enemyAnimatedSprite);
-                    enemies.add(enemyCharacter);
+                    // Create normal enemy
+                    enemySprite = new AnimatedSprite(spriteSheetImage, 2, 2, 1, 0, 0, 32, 32);
+                    enemyLevel = EnemyLevel.NORMAL;
                 }
+
+                // Set positions and dimensions
+                enemySprite.setX(initialX + i * spacingX);
+                enemySprite.setY(initialY + row * spacingY);
+                enemySprite.setFitWidth(48);
+                enemySprite.setFitHeight(48);
+
+                root.getChildren().add(enemySprite);
+
+                // Create enemy character and set level
+                enemyCharacter = new Character("", enemySprite.getX(), enemySprite.getY(), 64, 64);
+                enemyCharacter.setImageView(enemySprite);
+                enemyCharacter.setEnemyLevel(enemyLevel);
+                enemies.add(enemyCharacter);
             }
         }
     }

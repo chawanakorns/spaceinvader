@@ -26,6 +26,7 @@ public class Character {
     public boolean isDead = false;
     public boolean canShoot = true;
     public boolean isStrongEnemy = false;
+    private EnemyLevel enemyLevel;
     private AudioClip shootingSound;
     private AudioClip enemyDeathSound;
     private static final Logger logger = LoggerFactory.getLogger(Character.class);
@@ -33,6 +34,7 @@ public class Character {
     public int remainingPiercingBullets = 3;
     private boolean isPierce = false;
     private ImageView pierceLogo;
+
     public Character(String imagePath, double x, double y, double width, double height) {
         this.imageView = createSprite(imagePath, x, y, width, height);
         this.x = x;
@@ -123,11 +125,7 @@ public class Character {
                         if (isColliding(bullet, enemy.getImageView())) {
                             enemyIterator.remove();
                             enemiesToRemove.add(enemy);
-                            if (enemy.isStrongEnemy()) {
-                                mainGame.updateScore(true);
-                            } else {
-                                mainGame.updateScore(false);
-                            }
+                            mainGame.updateScore(enemy.getEnemyLevel());
                             hasEnemyDied = true;
                         }
                     }
@@ -136,11 +134,7 @@ public class Character {
                             bulletsToRemove.add(bullet);
                             enemyIterator.remove();
                             enemiesToRemove.add(enemy);
-                            if (enemy.isStrongEnemy()) {
-                                mainGame.updateScore(true);
-                            } else {
-                                mainGame.updateScore(false);
-                            }
+                            mainGame.updateScore(enemy.getEnemyLevel());
                             hasEnemyDied = true;
                         }
                     }
@@ -228,10 +222,6 @@ public class Character {
         imageView.setX(x);
         imageView.setY(y);
     }
-    
-    public boolean isStrongEnemy() {
-        return isStrongEnemy;
-    }
 
     public void setStrongEnemy(boolean isStrongEnemy) {
         this.isStrongEnemy = isStrongEnemy;
@@ -248,14 +238,11 @@ public class Character {
         STRONG, WEAK, BOSS;
     }
 
-    private EnemyType enemyType;
-
-    public EnemyType getEnemyType() {
-        return enemyType;
+    public void setEnemyLevel(EnemyLevel level) {
+        this.enemyLevel = level;
     }
 
-    public void setEnemyType(EnemyType enemyType) {
-        this.enemyType = enemyType;
+    public EnemyLevel getEnemyLevel() {
+        return enemyLevel;
     }
-
 }
