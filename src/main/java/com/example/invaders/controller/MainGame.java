@@ -39,7 +39,7 @@ public class MainGame {
     private double enemySpeed = 15;
     private Enemy enemy;
     private Timeline timeline;
-    public int score = 0;
+    private int score = 0;
     private Text scoreText = new Text("Score: 0");
     private Text gameOverText = new Text("Game Over!");
     private Boss boss;
@@ -111,7 +111,7 @@ public class MainGame {
         pierceLogo.setLayoutY(root.getPrefHeight() - 55);
         root.getChildren().add(pierceLogo);
 
-        pierceText = new Text(Integer.toString(player.remainingPiercingBullets));
+        pierceText = new Text(Integer.toString(player.getRemainingPiercingBullets()));
         pierceText.setFill(Color.WHITE);
         pierceText.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         pierceText.setX(40);
@@ -404,7 +404,7 @@ public class MainGame {
         updateScore(200);
 
         // Update Ui
-        updatePierceText(player.remainingPiercingBullets);
+        updatePierceText(player.getRemainingPiercingBullets());
 
         // delay enemy spawn
         scheduleEnemySpawn();
@@ -508,5 +508,9 @@ public class MainGame {
             root.getChildren().remove(shield);
         }
         shields.clear();
+    }
+
+    public int getScore() {
+        return score;
     }
 }

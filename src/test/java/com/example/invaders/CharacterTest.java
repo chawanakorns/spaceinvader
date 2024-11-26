@@ -69,19 +69,19 @@ public class CharacterTest {
 
     @Test
     public void ScoreShouldIncreaseWhenBulletHitsEnemy() {
-        int initialScore = launcher.spaceInvaderGame.score;
+        int initialScore = launcher.spaceInvaderGame.getScore();
         launcher.spaceInvaderGame.getCharacter().shoot(launcher.spaceInvaderGame.getRoot());
         launcher.spaceInvaderGame.updateScore(10);
-        int currentScore = launcher.spaceInvaderGame.score;
+        int currentScore = launcher.spaceInvaderGame.getScore();
         assertEquals(initialScore + 10, currentScore);
     }
     
     @Test
     public void ScoreShouldIncreaseWhenBulletHitsBoss() {
-        int initialScore = launcher.spaceInvaderGame.score;
+        int initialScore = launcher.spaceInvaderGame.getScore();
         launcher.spaceInvaderGame.getCharacter().shoot(launcher.spaceInvaderGame.getRoot());
         launcher.spaceInvaderGame.updateScore(50);
-        int currentScore = launcher.spaceInvaderGame.score;
+        int currentScore = launcher.spaceInvaderGame.getScore();
         assertEquals(initialScore + 50, currentScore);
     }
 }

@@ -23,15 +23,15 @@ public class Character {
     private double y;
     private int topBorder = 0;
     private List<ImageView> bullets = new ArrayList<>();
-    public boolean isDead = false;
-    public boolean canShoot = true;
-    public boolean isStrongEnemy = false;
+    boolean isDead = false;
+    private boolean canShoot = true;
+    private boolean isStrongEnemy = false;
     private EnemyLevel enemyLevel;
     private AudioClip shootingSound;
     private AudioClip enemyDeathSound;
     private static final Logger logger = LoggerFactory.getLogger(Character.class);
     private int bulletSpeed = 10;
-    public int remainingPiercingBullets = 3;
+    private int remainingPiercingBullets = 3;
     private boolean isPierce = false;
     private ImageView pierceLogo;
 
@@ -244,5 +244,9 @@ public class Character {
 
     public EnemyLevel getEnemyLevel() {
         return enemyLevel;
+    }
+
+    public int getRemainingPiercingBullets() {
+        return remainingPiercingBullets;
     }
 }

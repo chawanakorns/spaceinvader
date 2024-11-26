@@ -17,10 +17,10 @@ public class Launcher extends Application {
     private Stage primaryStage;
     public MainGame spaceInvaderGame = new MainGame();
     private int moveSpeed = 5;
-    public boolean movingLeft = false;
-    public boolean movingRight = false;
-    public boolean shooting = false;
-    public boolean pierceShooting = false;
+    private boolean movingLeft = false;
+    private boolean movingRight = false;
+    private boolean shooting = false;
+    private boolean pierceShooting = false;
     private int widthSize = 600;
     private int heightSize = 800;
     private static final Logger logger = LoggerFactory.getLogger(Launcher.class);

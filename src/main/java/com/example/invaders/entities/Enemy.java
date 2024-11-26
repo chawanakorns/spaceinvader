@@ -114,7 +114,7 @@ public class Enemy {
         long shootTime = currentTime - lastShootTime;
         boolean canshoot = shootTime > shootingInterval;
 
-        if (!player.isDead) {
+        if (!player.isDead()) {
             if (!root.getChildren().contains(player.getImageView())) {
                 root.getChildren().add(player.getImageView());
             }
