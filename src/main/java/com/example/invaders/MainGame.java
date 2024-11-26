@@ -199,7 +199,7 @@ public class MainGame {
                     for (ImageView bullet : player.getBullets()) {
                         if (boss.isColliding(bullet)) {
                         	root.getChildren().remove(bullet);
-                        	bossHit();
+                            handleBossDefeat();
                             playBossDeathSound();
 
                             Text gotLife = new Text("+1 Life");
@@ -394,19 +394,59 @@ public class MainGame {
     }
 
     // bullet collide boss and score update for boss
-    private void bossHit() {
+    private void handleBossDefeat() {
+        //update boss state
+        updateDefeatBossState();
+        stopBossSound();
+
+        // Add buff to player
+        updatePlayerBuffs();
+
+        // Score
+        updateScore(200);
+
+        // Update Ui
+        updatePierceText(player.remainingPiercingBullets);
+
+        // delay enemy spawn
+        scheduleEnemySpawn();
+    }
+
+    private void updatePlayerBuffs() {
+        player.receivePiercingBullet();
+        updatePlayerLives();
+        removeShields();
+        addShields();
+    }
+
+
+    private void scheduleEnemySpawn() {
+        if (boss == null && enemy.getEnemyCharacters().isEmpty()) {
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Platform.runLater(() -> spawnNextEnemySet());
+                    isDead = false;
+                }
+            }, 1000);
+        }
+    }
+
+    private void updateDefeatBossState() {
         root.getChildren().remove(boss.getAnimatedSprite());
         boss = null;
         isDead = true;
-        updateScore(200);
-        player.receivePiercingBullet();
-        updatePierceText(player.remainingPiercingBullets);
+    }
 
+    private void stopBossSound() {
         if (bossMoveSound != null) {
             bossMoveSound.stop();
         }
+    }
 
-        // Add extra life upon defeating the boss
+
+    private void updatePlayerLives() {
         if (playerLives < 6) {
             playerLives++;
             ImageView newLifeImage = new ImageView(new Image(getClass().getResourceAsStream("/com/example/invaders/assets/playerIcon2.png")));
@@ -423,20 +463,6 @@ public class MainGame {
             }
             lifeImages.add(newLifeImage);
             root.getChildren().add(newLifeImage);
-        }
-        removeShields();
-        addShields();
-
-        // delay enemy spawn
-        if (boss == null && enemy.getEnemyCharacters().isEmpty()) {
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                	Platform.runLater(() -> spawnNextEnemySet());
-                	isDead = false;
-                }
-            }, 1000);
         }
     }
 
