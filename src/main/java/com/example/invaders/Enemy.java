@@ -22,19 +22,30 @@ import java.util.List;
 import java.util.Random;
 
 public class Enemy {
-    protected List<Character> enemies = new ArrayList<>();
-    protected List<Rectangle> bullets = new ArrayList<>();
-    protected Random random = new Random();
+    protected final List<Character> enemies = new ArrayList<>();
+    protected final List<Rectangle> bullets = new ArrayList<>();
+    protected final Random random = new Random();
     protected long lastShootTime = 0;
-    protected final long shootingInterval = 1000;
-    protected int numRows = 5;
-    protected int numEnemiesPerRow = 10;
-    private AudioClip PlayerDeathSound;
+    protected int numRows;
+    protected int numEnemiesPerRow;
+    private final AudioClip PlayerDeathSound = new AudioClip(getClass()
+            .getResource("/com/example/invaders/assets/explosion.wav").toString());
     private static final Logger logger = LoggerFactory.getLogger(Character.class);
 
+    public Enemy(int numRows, int numEnemiesPerRow) {
+        this.numRows = numRows;
+        this.numEnemiesPerRow = numEnemiesPerRow;
+    }
+
     public Enemy() {
-        String soundPath = getClass().getResource("/com/example/invaders/assets/explosion.wav").toString();
-        PlayerDeathSound = new AudioClip(soundPath);
+    }
+
+    public int getNumRows() {
+        return numRows;
+    }
+
+    public int getNumEnemiesPerRow() {
+        return numEnemiesPerRow;
     }
 
     public void setNumRows(int numRows) {
@@ -46,10 +57,8 @@ public class Enemy {
     }
 
     private void playPlayerDeathSound() {
-        if (PlayerDeathSound != null) {
-            PlayerDeathSound.stop();
-            PlayerDeathSound.play();
-        }
+        PlayerDeathSound.stop();
+        PlayerDeathSound.play();
     }
     
     public void nextLevel(Pane root, Image spriteSheetImage) {
@@ -107,6 +116,7 @@ public class Enemy {
                 if (enemyCharacter.getY() >= 720) {
                     player.isDead = true;
                 }
+                long shootingInterval = 1000;
                 if (random.nextDouble() < 0.01 && (currentTime - lastShootTime) > shootingInterval) {
                     lastShootTime = currentTime;
                     Rectangle bullet = new Rectangle(4, 10, Color.WHITE);
@@ -140,7 +150,7 @@ public class Enemy {
                                 if (bullet.getY() >= 800 || player.isDead) {
                                     root.getChildren().remove(bullet);
                                     bullets.remove(bullet);
-                                    return; // Exit the loop if the bullet reaches the end or the player is dead
+                                    // Exit the loop if the bullet reaches the end or the player is dead
                                 }
                             });
                         }

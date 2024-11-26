@@ -61,7 +61,7 @@ public class MainGame {
     // set entities
     public MainGame() {
         player = new Character("/com/example/invaders/assets/playerIcon2.png", 300, 720, 32, 32);
-        enemy = new Enemy();
+        enemy = new Enemy(2,5);
         this.bossDeathSound = new AudioClip(getClass().getResource("/com/example/invaders/assets/invaderkilled.wav").toString());
         this.enemyMoveSound = new AudioClip(getClass().getResource("/com/example/invaders/assets/invadermove1.wav").toString());
         this.bossMoveSound = new MediaPlayer(new Media(getClass().getResource("/com/example/invaders/assets/bossmove.wav").toString()));
@@ -443,8 +443,6 @@ public class MainGame {
     // spawn next set of enemies
     private void spawnNextEnemySet() {
         Image spriteSheetImage = new Image(getClass().getResourceAsStream("/com/example/invaders/assets/invaders_sheet.v4.png")); // Provide the path to the next set of enemies
-        enemy.setNumRows(5);
-        enemy.setNumEnemiesPerRow(10);
         enemy.nextLevel(root, spriteSheetImage);
         direction = 1; // Set the direction to move right initially
         for (Character enemyCharacter : enemy.getEnemyCharacters()) {
