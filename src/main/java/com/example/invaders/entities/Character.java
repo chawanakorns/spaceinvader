@@ -1,14 +1,12 @@
-package com.example.invaders;
+package com.example.invaders.entities;
 
+import com.example.invaders.controller.MainGame;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.AudioClip;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +21,7 @@ public class Character {
     private ImageView imageView;
     private double x;
     private double y;
+    private int topBorder = 0;
     private List<ImageView> bullets = new ArrayList<>();
     public boolean isDead = false;
     public boolean canShoot = true;
@@ -30,7 +29,8 @@ public class Character {
     private AudioClip shootingSound;
     private AudioClip enemyDeathSound;
     private static final Logger logger = LoggerFactory.getLogger(Character.class);
-    int remainingPiercingBullets = 3;
+    private int bulletSpeed = 10;
+    public int remainingPiercingBullets = 3;
     private boolean isPierce = false;
     private ImageView pierceLogo;
     public Character(String imagePath, double x, double y, double width, double height) {
@@ -110,10 +110,10 @@ public class Character {
 
         for (Iterator<ImageView> iterator = bullets.iterator(); iterator.hasNext(); ) {
             ImageView bullet = iterator.next();
-            double newY = bullet.getY() - 10;
+            double newY = bullet.getY() - bulletSpeed;
             bullet.setY(newY);
 
-            if (newY < 0) {
+            if (newY < topBorder) {
                 bulletsToRemove.add(bullet);
             } else {
                 allBulletsRemoved = false;
@@ -243,4 +243,19 @@ public class Character {
     public void receivePiercingBullet() {
         remainingPiercingBullets++;
     }
+
+    public enum EnemyType {
+        STRONG, WEAK, BOSS;
+    }
+
+    private EnemyType enemyType;
+
+    public EnemyType getEnemyType() {
+        return enemyType;
+    }
+
+    public void setEnemyType(EnemyType enemyType) {
+        this.enemyType = enemyType;
+    }
+
 }

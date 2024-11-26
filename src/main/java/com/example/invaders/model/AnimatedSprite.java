@@ -1,4 +1,4 @@
-package com.example.invaders;
+package com.example.invaders.model;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;

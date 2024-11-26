@@ -1,10 +1,9 @@
-package com.example.invaders;
+package com.example.invaders.entities;
 
+import com.example.invaders.model.AnimatedSprite;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -17,17 +16,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
 public class Enemy {
     protected final List<Character> enemies = new ArrayList<>();
     protected final List<Rectangle> bullets = new ArrayList<>();
+    private int bulletSpeed = 5;
+    private int bottomBorder = 800;
     protected final Random random = new Random();
     protected long lastShootTime = 0;
     protected int numRows;
     protected int numEnemiesPerRow;
+    private int playerLinePosition = 720;
     private final AudioClip PlayerDeathSound = new AudioClip(getClass()
             .getResource("/com/example/invaders/assets/explosion.wav").toString());
     private static final Logger logger = LoggerFactory.getLogger(Character.class);
@@ -60,12 +61,12 @@ public class Enemy {
         PlayerDeathSound.stop();
         PlayerDeathSound.play();
     }
-    
+
     public void nextLevel(Pane root, Image spriteSheetImage) {
-    	double spacingX = 48;
+        double spacingX = 48;
         double spacingY = 48;
-        
-    	double totalEnemiesWidth = numEnemiesPerRow * spacingX;
+
+        double totalEnemiesWidth = numEnemiesPerRow * spacingX;
         double paneWidth = root.getPrefWidth();
         double initialX = (paneWidth - totalEnemiesWidth) / 2;
         double initialY = 150;
@@ -108,16 +109,19 @@ public class Enemy {
         return enemies;
     }
     public void shoot(Pane root, Character player, long currentTime) {
+        long shootingInterval = 1000;
+        long shootTime = currentTime - lastShootTime;
+        boolean canshoot = shootTime > shootingInterval;
+
         if (!player.isDead) {
             if (!root.getChildren().contains(player.getImageView())) {
                 root.getChildren().add(player.getImageView());
             }
             for (Character enemyCharacter : enemies) {
-                if (enemyCharacter.getY() >= 720) {
+                if (enemyCharacter.getY() >= playerLinePosition) {
                     player.isDead = true;
                 }
-                long shootingInterval = 1000;
-                if (random.nextDouble() < 0.01 && (currentTime - lastShootTime) > shootingInterval) {
+                if (random.nextDouble() < 0.01 && canshoot) {
                     lastShootTime = currentTime;
                     Rectangle bullet = new Rectangle(4, 10, Color.WHITE);
                     bullet.setX(enemyCharacter.getX() + enemyCharacter.getImageView().getFitWidth() / 2);
@@ -127,7 +131,7 @@ public class Enemy {
                     Platform.runLater(() -> root.getChildren().add(bullet));
 
                     new Thread(() -> {
-                        while (bullet.getY() < 800) {
+                        while (bullet.getY() < bottomBorder) {
                             try {
                                 Thread.sleep(20); // Adjust the bullet speed as needed
                             } catch (InterruptedException e) {
@@ -137,7 +141,7 @@ public class Enemy {
                                 if (!root.getChildren().contains(bullet)) {
                                     return; // Exit the loop if the bullet is removed
                                 }
-                                bullet.setY(bullet.getY() + 5); // Adjust the bullet speed as needed
+                                bullet.setY(bullet.getY() + bulletSpeed); // Adjust the bullet speed as needed
                                 if (!player.isDead && isColliding(bullet, player.getImageView())) {
                                     player.isDead = true;
                                     Platform.runLater(() -> root.getChildren().remove(player.getImageView()));
@@ -147,7 +151,7 @@ public class Enemy {
                                     logger.warn("Player shot by {}", enemyCharacter);
                                     return; // Exit the loop once the collision occurs
                                 }
-                                if (bullet.getY() >= 800 || player.isDead) {
+                                if (bullet.getY() >= bottomBorder || player.isDead) {
                                     root.getChildren().remove(bullet);
                                     bullets.remove(bullet);
                                     // Exit the loop if the bullet reaches the end or the player is dead

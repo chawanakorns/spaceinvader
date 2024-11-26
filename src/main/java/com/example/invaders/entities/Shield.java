@@ -1,4 +1,4 @@
-package com.example.invaders;
+package com.example.invaders.entities;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

@@ -1,12 +1,12 @@
 package com.example.invaders;
 
+import com.example.invaders.controller.MainGame;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -16,10 +16,13 @@ import org.slf4j.LoggerFactory;
 public class Launcher extends Application {
     private Stage primaryStage;
     public MainGame spaceInvaderGame = new MainGame();
+    private int moveSpeed = 5;
     public boolean movingLeft = false;
     public boolean movingRight = false;
     public boolean shooting = false;
     public boolean pierceShooting = false;
+    private int widthSize = 600;
+    private int heightSize = 800;
     private static final Logger logger = LoggerFactory.getLogger(Launcher.class);
     
     String buttonStyle = "-fx-font-size: 20px; -fx-min-width: 150px; -fx-min-height: 50px; -fx-text-fill: green; -fx-background-color: transparent; -fx-border-color: transparent; -fx-font-weight: bold;";
@@ -37,7 +40,7 @@ public class Launcher extends Application {
         primaryStage.setTitle("Space Invaders");
         VBox menuLayout = new VBox(10);
         menuLayout.setStyle("-fx-background-color: black; -fx-alignment: center;");
-        Scene menuScene = new Scene(menuLayout, 600, 800);
+        Scene menuScene = new Scene(menuLayout, widthSize, heightSize);
         
         // game logo
         Image logoImage = new Image(getClass().getResourceAsStream("/com/example/invaders/assets/spaceinvaders_logo.png"));
@@ -133,7 +136,7 @@ public class Launcher extends Application {
     }
     
     public void moveLeft() {
-        double newXLeft = spaceInvaderGame.getCharacter().getX() - 5;
+        double newXLeft = spaceInvaderGame.getCharacter().getX() - moveSpeed;
         if (newXLeft >= spaceInvaderGame.getMinX()) {
             spaceInvaderGame.getCharacter().setX(newXLeft);
             logger.info("Moving left. New X position: {}", newXLeft);
@@ -141,7 +144,7 @@ public class Launcher extends Application {
     }
 
     public void moveRight() {
-        double newXRight = spaceInvaderGame.getCharacter().getX() + 5;
+        double newXRight = spaceInvaderGame.getCharacter().getX() + moveSpeed;
         if (newXRight <= spaceInvaderGame.getMaxX()) {
             spaceInvaderGame.getCharacter().setX(newXRight);
             logger.info("Moving right. New X position: {}", newXRight);

@@ -1,13 +1,11 @@
-package com.example.invaders;
+package com.example.invaders.entities;
 
+import com.example.invaders.model.AnimatedSprite;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.geometry.Bounds;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
@@ -20,9 +18,12 @@ public class Boss extends Enemy{
     private double y;
     private double width;
     private double height;
+    private int leftBorder = 0;
     private double direction = 1;
+    private double moveSpeed = 1;
     private long lastShootTime = 0;
     private long lastAdjustmentTime = 0;
+    private int bulletSpeed = 3;
     private boolean isAdjusted = false;
     private List<Rectangle> bullets = new ArrayList<>();
 
@@ -44,10 +45,10 @@ public class Boss extends Enemy{
 
     public void moveBoss(double deltaX, double gameWidth) {
         double speed = isAdjusted ? 2 * deltaX : deltaX; // Adjust the speed during rapid shooting
-        if (x <= 0) {
-            direction = 1;
+        if (x <= leftBorder) {
+            direction = + moveSpeed;
         } else if (x + width >= gameWidth) {
-            direction = -1;
+            direction = - moveSpeed;
         }
         this.x += speed * direction;
         bossSprite.setLayoutX(x);
@@ -68,8 +69,7 @@ public class Boss extends Enemy{
                 bullets.add(bullet);
 
                 Timeline timeline = new Timeline(new KeyFrame(Duration.millis(5), event -> {
-                    bullet.setLayoutY(bullet.getLayoutY() + 3);
-
+                    bullet.setLayoutY(bullet.getLayoutY() + bulletSpeed);
                     if (!player.isDead && bullet.getBoundsInParent().intersects(player.getImageView().getBoundsInParent())) {
                         if (!player.isDead) {
                             player.isDead = true;
